@@ -38,8 +38,14 @@ applications:
   buildpacks: 
     - hwc_buildpack
   routes:
-    - route: <hostname>/api
+    - route: <name-of-service>/api
 ```    
+
+Push the application to cloud foundry
+
+```
+cf push <name-of-service>
+```
 
 Buildpacks:  @Brian 
 ----------------
