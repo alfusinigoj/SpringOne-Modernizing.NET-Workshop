@@ -38,13 +38,30 @@ applications:
   buildpacks: 
     - hwc_buildpack
   routes:
-    - route: <name-of-service>/api
+    - route: <host-name.domain-name>/api
 ```    
 
-Push the application to cloud foundry
+Push the service to cloud foundry
 
 ```
-cf push <name-of-service>
+cf push <api-app-name>
+```
+
+Create a manifest for the web frontend in the root of its directory.
+
+```
+---
+applications:
+- stack: windows
+  instances: 1
+  buildpacks: 
+    - hwc_buildpack
+```
+
+Push the service to cloud foundry
+
+```
+cf push <web-app-name>
 ```
 
 Buildpacks:  @Brian 
