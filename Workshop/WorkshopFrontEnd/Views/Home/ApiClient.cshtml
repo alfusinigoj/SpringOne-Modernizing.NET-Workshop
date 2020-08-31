@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Api Client";
+}
+
+<div class="jumbotron">
+    <h1>Api Client</h1>
+    <p class="lead">Results: <span id="results"></span></p>
+</div>
+
+@section Scripts {
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            url: "/api/values"
+        }).then(function (data) {
+            $('#results').text(data.join(" "));
+        });
+    });
+</script>
+}
