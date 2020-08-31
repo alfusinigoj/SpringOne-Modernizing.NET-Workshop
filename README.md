@@ -28,6 +28,18 @@ Our goals are
 Exercise 1: Push the application and try to scale 
 ----------------
  
+Create a manifest for the backend in the root of its directory.
+
+```
+---
+applications:
+- stack: windows
+  instances: 1
+  buildpacks: 
+    - hwc_buildpack
+  routes:
+    - route: <hostname>/api
+```    
 
 Buildpacks:  @Brian 
 ----------------
