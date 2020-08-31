@@ -25,7 +25,7 @@ Our goals are
 
     Use solutions that are minimally invasive to the code base 
 
-Exercise 1: Push the application and try to scale 
+Exercise 1: Push the application and try to scale (WIP @Chris)
 ----------------
  
 Create a manifest for the backend in the root of its directory.
@@ -75,7 +75,7 @@ See the app fail
 Buildpacks:  @Brian 
 ----------------
  
-Exercise 2
+Exercise 2 (WIP @Chris)
 ----------
 
 Create the shared redis service to store session state 
