@@ -58,14 +58,61 @@ applications:
     - hwc_buildpack
 ```
 
-Push the service to cloud foundry
+Push the web app to cloud foundry
 
 ```
 cf push <web-app-name>
 ```
 
+See the app work
+
+```
+cf scale -i 3 <app-name> 
+```
+
+See the app fail
+
 Buildpacks:  @Brian 
 ----------------
  
+Exercise 2
+----------
 
- 
+Create the shared redis service to store session state 
+
+```
+cf create-service p-redis shared-vm session 
+```
+
+Bind the application to redis
+
+```
+---
+applications:
+- stack: windows
+  instances: 3
+  buildpacks:
+    - hwc_buildpack
+  services:
+    - session
+```
+
+Add the redis session buildpack
+
+```
+---
+applications:
+- stack: windows
+  instances: 3
+  buildpacks:
+    - https://github.com/cloudfoundry-community/redis-session-aspnet-buildpack/releases/download/v1.0.5/Pivotal.Redis.Aspnet.Session.Buildpack-win-x64-1.0.5.zip 
+    - hwc_buildpack
+  services:
+    - session
+```
+
+Push the web app to cloud foundry
+
+```
+cf push <web-app-name>
+```
