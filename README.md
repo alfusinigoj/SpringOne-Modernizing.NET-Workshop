@@ -71,10 +71,57 @@ cf scale -i 3 <app-name>
 ```
 
 See the app fail
-
 Buildpacks:  @Brian 
 ----------------
- 
+A `buildpack` is an artifact that configures or provides your app's hosting environment.  For example, the `HWC_BUILDPACK` provides the Hostable Web Core for IIS app support.
+
+Buildpacks come in two flavors:
+1. A `supply builpack` helps bootstrap your app's dependencies for startup.
+1. A `final buildpack` is responsible for launching your app
+
+Buildpacks provide a series of scripts for the platform to invoke during buildpack detection and execution phases.  These scripts are referred to as `hooks`.
+
+#### Lifecycle
+
+A `buildpack` is run by the platform prior to app instance startup if:
+1. The buildpack's `detect` hook returns true (implicit)
+2. The buildpack is specified in the manifest (explicit)
+
+The platform invokes hooks provided by the buildpack:
+1. `supply`
+    * Dependency injection, environment setup.
+2. `finalize`
+    * Provide app startup concerns (webserver, etc.)
+3. `release`
+    * Provide metadata to control app startup - out of scope for today.
+
+The platform invokes buildpack hooks depending on buildpack type:
+1. A `supply builpack` must provide a `supply` hook.
+1. A `final buildpack` must provide a `finalize` hook.
+
+#### Composability
+Multi-buildpack allows us to compose an app startup pipeline where `supply buildpacks` are invoked in the order provided prior to the `final buildpack`, which starts the app.
+* Analogous to Middleware concept in WebAPI
+
+Multi-buildpack can be specified in yml:
+
+```yml
+---
+applications:
+- stack: windows
+  instances: 1
+  buildpacks:
+    - first_supply_buildpack
+    - second_supply_buildpack
+    - final_buildpack
+```
+
+Or, via command line:
+
+```CLI
+cf push APP-NAME -b FIRST-BUILDPACK -b SECOND-BUILDPACK -b FINAL-BUILDPACK
+```
+
 Exercise 2 (WIP @Chris)
 ----------
 
