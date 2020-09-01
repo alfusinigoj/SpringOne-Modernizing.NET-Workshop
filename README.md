@@ -127,9 +127,9 @@ cf push APP-NAME -b FIRST-BUILDPACK -b SECOND-BUILDPACK -b FINAL-BUILDPACK
 #### Redis Buildpack
 If you've ever pushed an app to Cloud Foundry that started successfully, you've already made use of a `final buildpack`.  In our sample web app, we've chosen to use the HWC_BUILDPACK as our `final buildpack` because the app we're pushing is a full framework .NET app.  And, while the HWC_BUILDPACK has solved our problem of getting our app to run on TAS, it's revealed a new problem regarding our app's design: its use of in-proc session.  Thankfully, there's a buildpack for that, and it's called the Redis for Session Buildpack.
 
-The Redis for Session Buildpack does a very simple trick: when its `supply` hook is invoked, the buildpack transforms your app's web.config and replaces use of in-proc session with use of a Redis backed session.  For the buildpack to be effective, we must do two things to our app:
+The Redis for Session Buildpack does a very simple trick: when its `supply` hook is invoked, the buildpack transforms your app's web.config and replaces use of in-proc session with use of a Redis backed session.  For the buildpack to be effective, we must do three things to our app:
 1. Add the Redis for Session buildpack to our manifest as a supply buildpack
-2. Add the RedisSessionStateProvider nuget package to your app.
+2. Add the RedisSessionStateProvider nuget package to our app.
 3. Bind our app to a Redis service instance.
 
 When the app is pushed with the buildpack, the Redis buildpack will lookup the details for connecting to Redis; this is only possible because we've bound our app to a Redis service instance.  If no Redis instances are found by the buildpack during startup, the web.config will not be modified.
