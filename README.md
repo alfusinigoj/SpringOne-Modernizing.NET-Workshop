@@ -1,7 +1,7 @@
 Workshop Context 
 ----------------
 
-In this exercise we’re going to perform a lightweight modernization on a fictitious full framework ASP.NET MVC application who's front-end consumes a WebAPI backend. The application is presumed to run on IIS today using standard virtual or physical infrastructure and our task is to migrate the application to Cloud Foundry. Our modernization efforts will involve building the necessary artifacts to get the application to run at all in the cloud and to allow the application to scale once it gets there.  
+In this workshop we’re going to perform a lightweight modernization of a fictitious full framework ASP.NET MVC application who's front-end consumes a WebAPI backend. The application is presumed to run on IIS today using standard virtual or physical infrastructure and our task is to migrate the application to Cloud Foundry. Our modernization efforts will involve building the necessary artifacts to get the application to run at all in the cloud and to allow the application to scale once it gets there.  
 
 All the while we’ll try to use a lightweight approach and make as few changes to application code as possible.  
 
@@ -19,13 +19,13 @@ Desired State:
 
 Our goals are  
 
-    Get this application operational on Cloud Foundry  
+1. Get this application operational on Cloud Foundry  
 
-    Ensure the application is scalable  
+1. Ensure the application is scalable  
 
-    Use solutions that are minimally invasive to the code base 
+1. Use solutions that are minimally invasive to the code base 
 
-Exercise 1: Push the application and try to scale (WIP @Chris)
+Exercise 1: Push the application and try to scale
 ----------------
  
 Create a manifest for the backend in the root of its directory.
@@ -64,15 +64,23 @@ Push the web app to cloud foundry
 cf push <web-app-name>
 ```
 
-See the app work
+Find the url for your application by visitng it's route in a web browser. You can retreive the route with 
+
+```
+cf app <web-app-name>
+```
+
+Select "ViewCounter" from the top menu of the web application. See the counter increments with every refresh. Do this 10 times or so to verify.
+
+Now scale the application from a single instance to three. 
 
 ```
 cf scale -i 3 <app-name> 
 ```
 
-See the app fail
+Visit the "ViewCounter" page again and refresh it several times. Note that the first few request might be a little slow while your application is waking up. Note that the view count isn't incrementing on every request. Our application is broken!
 
-Buildpacks:  @Brian 
+Buildpacks:
 ----------------
 A `buildpack` is an artifact that configures or provides your app's hosting environment.  For example, the `HWC_BUILDPACK` provides the Hostable Web Core for IIS app support.
 
@@ -141,10 +149,10 @@ If we've followed the happy path (installed the nuget and added a redis service 
 ##### Some caveats
 The .NET framework requires that objects stored in session state must be serializable; the one exception to this rule is if session is maintained in process.  If your app was not designed with externalization of session in mind, you may encounter exceptions for any objects stored in session that cannot be serialized.
 
-
-
-Exercise 2 (WIP @Chris)
+Exercise 2
 ----------
+
+Now we'll fix the application by externalizing the session to Redis. We'll use a community-maintained buildpack to deal with the discovery and configuration of the Redis service and session provider. We won't have to write any code to make this happen! 
 
 Create the shared redis service to store session state 
 
@@ -184,3 +192,5 @@ Push the web app to cloud foundry
 ```
 cf push <web-app-name>
 ```
+
+Now visit the "ViewCounter" in a browser again. Again, the first few requests might be slow while your application is waking up. See that the view counts are incerementing correctly now?
